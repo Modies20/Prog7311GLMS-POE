@@ -1,0 +1,111 @@
+﻿@model GLMS.Data.Entities.Contract
+
+@{
+    ViewData["Title"] = "Create Contract";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-plus-circle"></i> Create New Contract</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="ContractNumber" class="form-label"></label>
+                        <input asp-for="ContractNumber" class="form-control" placeholder="e.g., CT-2024-001" />
+                        <span asp-validation-for="ContractNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ClientId" class="form-label"></label>
+                        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(ViewBag.Clients, "ClientId", "Name"))">
+                            <option value="">-- Select Client --</option>
+                        </select>
+                        <span asp-validation-for="ClientId" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="StartDate" class="form-label"></label>
+                            <input asp-for="StartDate" class="form-control" type="date" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EndDate" class="form-label"></label>
+                            <input asp-for="EndDate" class="form-control" type="date" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Status" class="form-label"></label>
+                            <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<GLMS.Data.Entities.ContractStatus>()"></select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ServiceLevel" class="form-label"></label>
+                            <select asp-for="ServiceLevel" class="form-select" asp-items="Html.GetEnumSelectList<GLMS.Data.Entities.ServiceLevel>()"></select>
+                            <span asp-validation-for="ServiceLevel" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TermsAndConditions" class="form-label"></label>
+                        <textarea asp-for="TermsAndConditions" class="form-control" rows="3" placeholder="Enter contract terms and conditions..."></textarea>
+                        <span asp-validation-for="TermsAndConditions" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Signed Agreement (PDF)</label>
+                        <input type="file" name="agreementFile" class="form-control" accept=".pdf" />
+                        <small class="text-muted">Only PDF files up to 10MB are allowed.</small>
+                        <span asp-validation-for="FilePath" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Create Contract
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Contract Status:</strong></p>
+                <ul>
+                    <li><span class="badge bg-secondary">Draft</span> - Initial state, not yet active</li>
+                    <li><span class="badge bg-success">Active</span> - Contract is valid for service requests</li>
+                    <li><span class="badge bg-warning">On Hold</span> - Temporarily suspended</li>
+                    <li><span class="badge bg-danger">Expired</span> - Past end date</li>
+                </ul>
+                <hr />
+                <p><strong>Service Levels:</strong></p>
+                <ul>
+                    <li><strong>Standard</strong> - Basic service level</li>
+                    <li><strong>Premium</strong> - Priority support</li>
+                    <li><strong>Enterprise</strong> - 24/7 dedicated support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

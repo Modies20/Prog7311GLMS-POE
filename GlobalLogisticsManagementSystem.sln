@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLMS.Web", "GLMS.Web\GLMS.Web.csproj", "{EB3B9B66-7CF5-4CAB-B595-213A2A115238}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLMS.Data", "GLMS.Data\GLMS.Data.csproj", "{184F93A5-2010-425C-9EC0-C22D8FC49DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLMS.Tests", "GLMS.Tests\GLMS.Tests.csproj", "{502D5366-12AA-416B-812C-88BFF7E2998B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB3B9B66-7CF5-4CAB-B595-213A2A115238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3B9B66-7CF5-4CAB-B595-213A2A115238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3B9B66-7CF5-4CAB-B595-213A2A115238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3B9B66-7CF5-4CAB-B595-213A2A115238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184F93A5-2010-425C-9EC0-C22D8FC49DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{184F93A5-2010-425C-9EC0-C22D8FC49DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{184F93A5-2010-425C-9EC0-C22D8FC49DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{184F93A5-2010-425C-9EC0-C22D8FC49DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{502D5366-12AA-416B-812C-88BFF7E2998B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{502D5366-12AA-416B-812C-88BFF7E2998B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{502D5366-12AA-416B-812C-88BFF7E2998B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{502D5366-12AA-416B-812C-88BFF7E2998B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4331255D-BBFB-4663-90D1-341EFE9767B7}
+	EndGlobalSection
+EndGlobal

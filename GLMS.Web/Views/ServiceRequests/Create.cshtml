@@ -1,0 +1,139 @@
+﻿@model GLMS.Data.Entities.ServiceRequest
+
+@{
+    ViewData["Title"] = "Create Service Request";
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-plus-circle"></i> Raise Service Request</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" id="serviceRequestForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="ContractId" class="form-label">Select Active Contract</label>
+                        <select asp-for="ContractId" class="form-select" asp-items="@(new SelectList(ViewBag.Contracts, "ContractId", "ContractNumber"))">
+                            <option value="">-- Select Contract --</option>
+                        </select>
+                        <span asp-validation-for="ContractId" class="text-danger"></span>
+                        <small class="text-muted">Only active contracts are shown</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe the service required..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="AmountUSD" class="form-label">Amount (USD)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="AmountUSD" class="form-control" id="AmountUSD" />
+                            </div>
+                            <span asp-validation-for="AmountUSD" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Amount (ZAR)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R</span>
+                                <input type="text" id="AmountZAR" class="form-control" readonly disabled />
+                            </div>
+                            <small class="text-muted" id="exchangeRateInfo">Loading exchange rate...</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Notes" class="form-label"></label>
+                        <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Any additional notes..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger"></span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Submit Request
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Currency Conversion:</strong></p>
+                <p>The system automatically converts USD to ZAR using real-time exchange rates from a trusted API.</p>
+                <hr />
+                <p><strong>Validation Rules:</strong></p>
+                <ul>
+                    <li>Service requests can only be raised against <strong>Active</strong> contracts</li>
+                    <li>Contract must have started and not yet expired</li>
+                    <li>Amount must be greater than zero</li>
+                </ul>
+                <hr />
+                <div class="alert alert-info">
+                    <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> The exchange rate updates automatically with each request. The ZAR amount will be calculated in real-time as you type the USD amount.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        let currentExchangeRate = 0;
+
+        // Load exchange rate on page load
+        $(document).ready(function() {
+            loadExchangeRate();
+
+            $('#AmountUSD').on('input', function() {
+                calculateZAR();
+            });
+        });
+
+        function loadExchangeRate() {
+            $.ajax({
+                url: '@Url.Action("GetExchangeRate", "ServiceRequests")',
+                type: 'GET',
+                success: function(data) {
+                    if (data.success) {
+                        currentExchangeRate = data.rate;
+                        $('#exchangeRateInfo').text(`Current exchange rate: 1 USD = ${currentExchangeRate.toFixed(2)} ZAR`);
+                        calculateZAR();
+                    } else {
+                        $('#exchangeRateInfo').text('Using default exchange rate: 1 USD = 18.50 ZAR');
+                        currentExchangeRate = 18.50;
+                        calculateZAR();
+                    }
+                },
+                error: function() {
+                    $('#exchangeRateInfo').text('Unable to fetch live rate. Using default: 1 USD = 18.50 ZAR');
+                    currentExchangeRate = 18.50;
+                    calculateZAR();
+                }
+            });
+        }
+
+        function calculateZAR() {
+            var usd = parseFloat($('#AmountUSD').val()) || 0;
+            var zar = usd * currentExchangeRate;
+            $('#AmountZAR').val(zar.toFixed(2));
+        }
+    </script>
+}

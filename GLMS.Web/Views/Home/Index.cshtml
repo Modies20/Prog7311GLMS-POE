@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to GLMS</h1>
+    <p class="lead">Global Logistics Management System for TechMove Logistics</p>
+    <hr />
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary"></i>
+                    <h5 class="card-title mt-3">Client Management</h5>
+                    <p class="card-text">Manage all your logistics clients and their contact information.</p>
+                    <a asp-controller="Clients" asp-action="Index" class="btn btn-primary">Manage Clients</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <i class="fas fa-file-signature fa-3x text-success"></i>
+                    <h5 class="card-title mt-3">Contract Management</h5>
+                    <p class="card-text">Create and manage contracts with automated status tracking.</p>
+                    <a asp-controller="Contracts" asp-action="Index" class="btn btn-success">Manage Contracts</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <i class="fas fa-truck fa-3x text-warning"></i>
+                    <h5 class="card-title mt-3">Service Requests</h5>
+                    <p class="card-text">Raise service requests with automatic currency conversion.</p>
+                    <a asp-controller="ServiceRequests" asp-action="Index" class="btn btn-warning">View Requests</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

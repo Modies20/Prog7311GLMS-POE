@@ -1,0 +1,142 @@
+﻿@model IEnumerable<GLMS.Data.Entities.Contract>
+
+@{
+    ViewData["Title"] = "Contracts";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-file-signature"></i> Contracts</h1>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Create New Contract
+    </a>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Contracts</h5>
+                <h2>@ViewBag.TotalContracts</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Active Contracts</h5>
+                <h2>@ViewBag.ActiveContracts</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Expiring Soon (30 days)</h5>
+                <h2>@ViewBag.ExpiringSoon</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Form -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-filter"></i> Filter Contracts
+    </div>
+    <div class="card-body">
+        <form method="get" asp-action="Index">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<GLMS.Data.Entities.ContractStatus>()">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Start Date From</label>
+                    <input type="date" name="startDate" class="form-control" value="@ViewBag.CurrentStartDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">End Date To</label>
+                    <input type="date" name="endDate" class="form-control" value="@ViewBag.CurrentEndDate" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> Apply Filters
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Contracts Table -->
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Contract #</th>
+                <th>Client</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Service Level</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ContractNumber</td>
+                    <td>@item.Client?.Name</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>
+                        @{
+                            var statusClass = item.Status switch
+                            {
+                                GLMS.Data.Entities.ContractStatus.Active => "success",
+                                GLMS.Data.Entities.ContractStatus.Expired => "danger",
+                                GLMS.Data.Entities.ContractStatus.OnHold => "warning",
+                                _ => "secondary"
+                            };
+                        }
+                        <span class="badge bg-@statusClass">@item.Status</span>
+                        @if (item.Status == GLMS.Data.Entities.ContractStatus.Active && item.DaysRemaining <= 30 && item.DaysRemaining > 0)
+                        {
+                            <span class="badge bg-warning">Expires in @item.DaysRemaining days</span>
+                        }
+                    </td>
+                    <td>@item.ServiceLevel</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.ContractId" class="btn btn-sm btn-info" title="Details">
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.ContractId" class="btn btn-sm btn-warning" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.ContractId" class="btn btn-sm btn-danger" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        @if (!string.IsNullOrEmpty(item.FilePath))
+                        {
+                            <a asp-action="DownloadFile" asp-route-id="@item.ContractId" class="btn btn-sm btn-secondary" title="Download PDF">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i> No contracts found. Click "Create New Contract" to get started.
+    </div>
+}
