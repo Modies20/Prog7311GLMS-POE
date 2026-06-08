@@ -80,7 +80,7 @@ public class CurrencyExchangeTests
     {
         // Arrange
         var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
-        var responseContent = $"{{\"base\":\"USD\",\"date\":\"2024-01-01\",\"rates\":{{\"ZAR\":{rate}}}}}";
+        var responseContent = $"{{\"base\":\"USD\",\"date\":\"2024-01-01\",\"rates\":{{\"ZAR\":{rate.ToString(System.Globalization.CultureInfo.InvariantCulture)}}}}}";
 
         mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
